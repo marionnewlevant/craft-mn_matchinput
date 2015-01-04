@@ -15,8 +15,8 @@ When you create the field, you specify the `Input Mask`. This is a [PCRE Pattern
 
 **Examples**
 
-- `http://` - not a valid pattern, you will get an error
-- `/http:\/\/` - valid pattern, will match string with `http://` in it anywhere
-- `#http://#` - valid pattern, will match string with `http://` in it anywhere
+- `http://` - not a valid pattern (no delimiters), you will get a php error
+- `/http:\/\//` - valid pattern, will match string with `http://` in it anywhere
+- `#http://#` - valid pattern, will match string with `http://` in it anywhere (sometimes / isn't the best delimiter)
 - `#^http://#` - will match string that begins with `http://`
-- `/^\d{5}(-\d{4})?$/` - will match 5 digits, optionally followed by - and 4 digits
+- `/^\d{5}(-\d{4})?$/` - will match 5 digits, optionally followed by - and 4 digits (uses ^ and $ to match the entire string)
