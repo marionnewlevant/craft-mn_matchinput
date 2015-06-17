@@ -10,6 +10,16 @@
   errors: settings.getErrors('inputMask')
 }) }}
 
+{{ forms.textField({
+  label: "Error Message"|t,
+  instructions: "Error message for when the pattern does not match the input."|t,
+  id: 'errorMessage',
+  name: 'errorMessage',
+  value: settings.errorMessage,
+  translatable: false,
+  errors: settings.getErrors('errorMessage')
+}) }}
+
 {# below here straight from _components/fieldtypes/PlainText/settings.html #}
 
 {{ forms.textField({

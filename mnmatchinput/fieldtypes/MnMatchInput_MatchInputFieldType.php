@@ -51,13 +51,17 @@ class MnMatchInput_MatchInputFieldType extends BaseFieldType
 			$errors = array();
 		}
 
-		$inputMask = $this->getSettings()->inputMask;
-
-		$match = preg_match($inputMask, $value);
-
-		if ($match !== 1)
+		if ($value != '')
 		{
-			$errors[] = Craft::t('Value did not match pattern.');
+			// skip for empty fields. If they are not ok, set required
+			$inputMask = $this->getSettings()->inputMask;
+
+			$match = preg_match($inputMask, $value);
+
+			if ($match !== 1)
+			{
+				$errors[] = $this->getSettings()->errorMessage ?: 'Does not match pattern';
+			}
 		}
 
 		if ($errors)
@@ -70,18 +74,13 @@ class MnMatchInput_MatchInputFieldType extends BaseFieldType
 		}
 	}
 
+
 	// Protected Methods
 	// =========================================================================
 
-	protected function defineSettings()
+	protected function getSettingsModel()
 	{
-		return array(
-			'inputMask'     => array(AttributeType::String),
-			'placeholder'   => array(AttributeType::String),
-			'multiline'     => array(AttributeType::Bool),
-			'initialRows'   => array(AttributeType::Number, 'min' => 1, 'default' => 4),
-			'maxLength'     => array(AttributeType::Number, 'min' => 0),
-		);
+		return new MnMatchInput_SettingsModel();
 	}
 
 }

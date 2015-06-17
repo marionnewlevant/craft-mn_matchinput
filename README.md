@@ -1,6 +1,8 @@
 craft-mn_matchinput
 ===================
 
+***This is the Craft 2 version. Craft 3 version is in craft3 branch***
+
 Craft field type for text fields that match a regex pattern
 
 **Installation**
@@ -11,12 +13,17 @@ Craft field type for text fields that match a regex pattern
 
 **Usage**
 
-When you create the field, you specify the `Input Mask`. This is a [PCRE Pattern](http://php.net/manual/en/pcre.pattern.php). If the `Input Mask` is not a valid pattern (probably because you forgot the delimiters), you will get a php error when you try to save an entry with that field.
+When you create the field, you specify the `Input Mask`. This is a [PCRE Pattern](http://php.net/manual/en/pcre.pattern.php). You also specify an `Error Message` to display when the field does not match the pattern
 
 **Examples**
 
-- `http://` - not a valid pattern (no delimiters), you will get a php error
+- `http://` - not a valid pattern (no delimiters)
 - `/http:\/\//` - valid pattern, will match string with `http://` in it anywhere
 - `#http://#` - valid pattern, will match string with `http://` in it anywhere (sometimes / isn't the best delimiter)
 - `#^http://#` - will match string that begins with `http://`
 - `/^\d{5}(-\d{4})?$/` - will match 5 digits, optionally followed by - and 4 digits (uses ^ and $ to match the entire string)
+
+**Change Log**
+
+- 2.0: Always accept blank input. Appropriate error message (rather than php error) for invalid regex. Custom error message for when field does not match pattern.
+- 1.0: Initial release
