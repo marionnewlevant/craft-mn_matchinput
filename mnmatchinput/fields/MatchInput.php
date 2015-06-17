@@ -6,104 +6,110 @@ use craft\app\fields\PlainText;
 
 class MatchInput extends PlainText
 {
-  // Static
-  // =========================================================================
+	// Static
+	// =========================================================================
 
-  /**
-   * @inheritdoc
-   */
-  public static function displayName()
-  {
-    return Craft::t('app', 'Match Input');
-  }
+	/**
+	 * @inheritdoc
+	 */
+	public static function displayName()
+	{
+		return Craft::t('app', 'Match Input');
+	}
 
-  public static function validateRegex($regex)
-  {
-  	@$valid = (preg_match($regex, '') !== false);
-  	return $valid;
-  }
+	public static function validateRegex($regex)
+	{
+		set_error_handler(function() { return true; }, E_NOTICE);
+		$valid = (preg_match($regex, '') !== false);
+		restore_error_handler();
 
-
-  // Properties
-  // =========================================================================
-
-  /**
-   * @var string The input’s inputMask text
-   */
-  public $inputMask;
-
-  /**
-   * @var string The input’s errorMessage text
-   */
-  public $errorMessage;
-
-  // Public Methods
-  // =========================================================================
-
-  /**
-   * @inheritdoc
-   */
-  public function getSettingsHtml()
-  {
-    return Craft::$app->getView()->renderTemplate('mnmatchinput/settings', [
-      'field' => $this
-    ]);
-  }
+		return $valid;
+	}
 
 
-  /**
-   * @inheritdoc
-   */
-  public function getInputHtml($value, $element)
-  {
-    return Craft::$app->getView()->renderTemplate('mnmatchinput/input', [
-      'name'  => $this->handle,
-      'value' => $value,
-      'field' => $this,
-    ]);
-  }
+	// Properties
+	// =========================================================================
 
-  /**
-   * @inheritdoc
-   */
-  public function validateValue($value, $element)
-  {
-    // get any current errors
-    $errors = parent::validate($value);
+	/**
+	 * @var string The input’s inputMask text
+	 */
+	public $inputMask;
 
-    if (!is_array($errors))
-    {
-      $errors = [];
-    }
+	/**
+	 * @var string The input’s errorMessage text
+	 */
+	public $errorMessage;
 
-    if ($value !== '')
-    { // for blank fields, we defer to required or not
-	    $inputMask = $this->inputMask;
+	// Public Methods
+	// =========================================================================
 
-	    $match = preg_match($inputMask, $value);
+	/**
+	 * @inheritdoc
+	 */
+	public function getSettingsHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('mnmatchinput/settings', [
+			'field' => $this
+		]);
+	}
 
-	    if ($match !== 1)
-	    {
-	      // you might think printing out the pattern that failed to match
-	      // here would be helpful, but all you get is unfriendly regex.
-	      // Just looks like random cartoon swearing
-	      $errors[] = Craft::t('app', $this->errorMessage);
-	    }
-    }
 
-    if ($errors)
-    {
-      return $errors;
-    }
-    else
-    {
-      return true;
-    }
-  }
+	/**
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, $element)
+	{
+		return Craft::$app->getView()->renderTemplate('mnmatchinput/input', [
+			'name'  => $this->handle,
+			'value' => $value,
+			'field' => $this,
+		]);
+	}
 
-  public function beforeSave()
-  {
-  	return self::validateRegex($this->inputMask);
-  }
+	/**
+	 * @inheritdoc
+	 */
+	public function validateValue($value, $element)
+	{
+		// get any current errors
+		$errors = parent::validate($value);
+
+		if (!is_array($errors))
+		{
+			$errors = [];
+		}
+
+		if ($value !== '')
+		{ // for blank fields, we defer to required or not
+			$inputMask = $this->inputMask;
+
+			$match = preg_match($inputMask, $value);
+
+			if ($match !== 1)
+			{
+				$errors[] = Craft::t('app', $this->errorMessage);
+			}
+		}
+
+		if ($errors)
+		{
+			return $errors;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	public function validate($attributeNames = NULL, $clearErrors = true)
+	{
+		$validates = parent::validate($attributeNames, $clearErrors);
+		if (!self::validateRegex($this->inputMask))
+		{
+			$this->addError('inputMask', Craft::t('app', 'Not a valid regex (missing delimiters?)'));
+			$validates = false;
+		}
+		return $validates;
+	}
 
 }

@@ -15,7 +15,7 @@ When you create the field, you specify the `Input Mask`. This is a [PCRE Pattern
 
 **Examples**
 
-- `http://` - not a valid pattern (no delimiters), you will get a php error
+- `http://` - not a valid pattern (no delimiters)
 - `/http:\/\//` - valid pattern, will match string with `http://` in it anywhere
 - `#http://#` - valid pattern, will match string with `http://` in it anywhere (sometimes `/` isn't the best delimiter)
 - `#^http://#` - will match string that begins with `http://`
@@ -23,6 +23,6 @@ When you create the field, you specify the `Input Mask`. This is a [PCRE Pattern
 
 **Change Log**
 
-- 2.0: Craft 3 version. See master branch for Craft 2 version. Custom error message for failure to match. Checks for valid regex, and will not save field if regex is invalid
-- 1.1: Blank fields are not matched against pattern
+- 3.0: Craft 3 version. See master branch for Craft 2 version.
+- 2.0: Custom error message for failure to match. Checks for valid regex, and will not save field if regex is invalid. Does not validate blank fields.
 - 1.0: Initial release
