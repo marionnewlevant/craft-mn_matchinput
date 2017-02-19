@@ -1,7 +1,7 @@
 craft-mn_matchinput
 ===================
 
-***This is the Craft 2 version. Craft 3 version is in craft3 branch***
+***This is the Craft 2 version. Craft 3 version is in craft3-match_input***
 
 Craft field type for text fields that match a regex pattern
 
